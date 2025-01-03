@@ -102,6 +102,7 @@ let connectorList: array<connectorTypes> = [
   Processors(NOVALNET),
   Processors(DEUTSCHEBANK),
   Processors(NEXIXPAY),
+  Processors(ARCHIPEL),
 ]
 
 let connectorListForLive: array<connectorTypes> = [
@@ -531,6 +532,10 @@ let riskifyedInfo = {
   ],
 }
 
+ let archipelInfo = {
+   description: "Full-service processor offering secure payment solutions and innovative banking technologies for businesses of all sizes."
+ }
+
 let getConnectorNameString = (connector: processorTypes) =>
   switch connector {
   | ADYEN => "adyen"
@@ -603,6 +608,7 @@ let getConnectorNameString = (connector: processorTypes) =>
   | NOVALNET => "novalnet"
   | DEUTSCHEBANK => "deutschebank"
   | NEXIXPAY => "nexixpay"
+  | ARCHIPEL => "archipel"
   }
 
 let getThreeDsAuthenticatorNameString = (threeDsAuthenticator: threeDsAuthenticatorTypes) =>
@@ -719,6 +725,7 @@ let getConnectorNameTypeFromString = (connector, ~connectorType=ConnectorTypes.P
     | "novalnet" => Processors(NOVALNET)
     | "deutschebank" => Processors(DEUTSCHEBANK)
     | "nexixpay" => Processors(NEXIXPAY)
+    | "archipel" => Processors(ARCHIPEL)
     | _ => UnknownConnector("Not known")
     }
   | ThreeDsAuthenticator =>
@@ -819,6 +826,7 @@ let getProcessorInfo = connector => {
   | NOVALNET => novalnetInfo
   | DEUTSCHEBANK => deutscheBankInfo
   | NEXIXPAY => nexixpayInfo
+  | ARCHIPEL => archipelInfo
   }
 }
 let getThreedsAuthenticatorInfo = threeDsAuthenticator =>
@@ -1264,7 +1272,7 @@ let getConnectorFields = connectorDetails => {
   open LogicUtils
   let connectorAccountDict =
     connectorDetails->getDictFromJsonObject->getDictfromDict("connector_auth")
-  let bodyType = connectorAccountDict->Dict.keysToArray->Array.get(0)->Option.getOr("")
+  let bodyType = connectorAccountDict->Dict.keysToArray->Array.get(0)->Option.getOr("NoKey")
   let connectorAccountFields = connectorAccountDict->getDictfromDict(bodyType)
   let connectorMetaDataFields = connectorDetails->getDictFromJsonObject->getDictfromDict("metadata")
   let isVerifyConnector = connectorDetails->getDictFromJsonObject->getBool("is_verifiable", false)
@@ -1645,6 +1653,7 @@ let getDisplayNameForProcessor = connector =>
   | NOVALNET => "Novalnet"
   | DEUTSCHEBANK => "Deutsche Bank"
   | NEXIXPAY => "Nexixpay"
+  | ARCHIPEL => "Archipel"
   }
 
 let getDisplayNameForThreedsAuthenticator = threeDsAuthenticator =>
