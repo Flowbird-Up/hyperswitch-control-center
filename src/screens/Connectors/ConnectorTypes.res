@@ -95,6 +95,7 @@ type processorTypes =
   | NOVALNET
   | DEUTSCHEBANK
   | NEXIXPAY
+  | ARCHIPEL
 
 type payoutProcessorTypes =
   | ADYEN
