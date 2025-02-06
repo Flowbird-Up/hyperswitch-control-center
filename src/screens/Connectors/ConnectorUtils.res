@@ -106,6 +106,7 @@ let connectorList: array<connectorTypes> = [
   Processors(NEXIXPAY),
   Processors(JPMORGAN),
   Processors(XENDIT),
+  Processors(ARCHIPEL),
 ]
 
 let connectorListForLive: array<connectorTypes> = [
@@ -553,6 +554,10 @@ let riskifyedInfo = {
   ],
 }
 
+let archipelInfo = {
+  description: "Full-service processor offering secure payment solutions and innovative banking technologies for businesses of all sizes.",
+}
+
 let getConnectorNameString = (connector: processorTypes) =>
   switch connector {
   | ADYEN => "adyen"
@@ -625,6 +630,7 @@ let getConnectorNameString = (connector: processorTypes) =>
   | NEXIXPAY => "nexixpay"
   | JPMORGAN => "jpmorgan"
   | XENDIT => "xendit"
+  | ARCHIPEL => "archipel"
   }
 
 let getPayoutProcessorNameString = (payoutProcessor: payoutProcessorTypes) =>
@@ -754,6 +760,7 @@ let getConnectorNameTypeFromString = (connector, ~connectorType=ConnectorTypes.P
     | "nexixpay" => Processors(NEXIXPAY)
     | "jpmorgan" => Processors(JPMORGAN)
     | "xendit" => Processors(XENDIT)
+    | "archipel" => Processors(ARCHIPEL)
     | _ => UnknownConnector("Not known")
     }
   | PayoutProcessor =>
@@ -865,6 +872,7 @@ let getProcessorInfo = (connector: ConnectorTypes.processorTypes) => {
   | NEXIXPAY => nexixpayInfo
   | JPMORGAN => jpmorganInfo
   | XENDIT => xenditInfo
+  | ARCHIPEL => archipelInfo
   }
 }
 
@@ -1335,7 +1343,7 @@ let getConnectorFields = connectorDetails => {
   open LogicUtils
   let connectorAccountDict =
     connectorDetails->getDictFromJsonObject->getDictfromDict("connector_auth")
-  let bodyType = connectorAccountDict->Dict.keysToArray->Array.get(0)->Option.getOr("")
+  let bodyType = connectorAccountDict->Dict.keysToArray->Array.get(0)->Option.getOr("NoKey")
   let connectorAccountFields = connectorAccountDict->getDictfromDict(bodyType)
   let connectorMetaDataFields = connectorDetails->getDictFromJsonObject->getDictfromDict("metadata")
   let isVerifyConnector = connectorDetails->getDictFromJsonObject->getBool("is_verifiable", false)
@@ -1716,6 +1724,7 @@ let getDisplayNameForProcessor = (connector: ConnectorTypes.processorTypes) =>
   | NEXIXPAY => "Nexixpay"
   | JPMORGAN => "JP Morgan"
   | XENDIT => "Xendit"
+  | ARCHIPEL => "Archipel"
   }
 
 let getDisplayNameForPayoutProcessor = (payoutProcessor: ConnectorTypes.payoutProcessorTypes) =>
