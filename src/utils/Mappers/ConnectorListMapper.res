@@ -102,6 +102,7 @@ let connectorAuthTypeMapper = (str): connectorAuthType => {
   | "multiauthkey" => MultiAuthKey
   | "currencyauthkey" => CurrencyAuthKey
   | "certificateauth" => CertificateAuth
+  | "nokey" => NoKey
   | _ => UnKnownAuthType
   }
 }
@@ -138,6 +139,9 @@ let getCertificateAuth = (dict): certificateAuth => {
   certificate: dict->getString("certificate", ""),
   private_key: dict->getString("private_key", ""),
 }
+let getNoKey = (dict): noKey => {
+  auth_type: dict->getString("auth_type", "NoKey"),
+}
 
 let getAccountDetails = (dict): connectorAuthTypeObj => {
   let authType = dict->getString("auth_type", "")->connectorAuthTypeMapper
@@ -148,6 +152,7 @@ let getAccountDetails = (dict): connectorAuthTypeObj => {
   | MultiAuthKey => MultiAuthKey(dict->getMultiAuthKeyAuth)
   | CurrencyAuthKey => CurrencyAuthKey(dict->getCurrencyAuthKey)
   | CertificateAuth => CertificateAuth(dict->getCertificateAuth)
+  | NoKey => NoKey(dict->getNoKey)
   | UnKnownAuthType => UnKnownAuthType(JSON.Encode.null)
   }
   d
