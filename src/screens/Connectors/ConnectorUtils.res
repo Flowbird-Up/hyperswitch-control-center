@@ -113,6 +113,7 @@ let connectorList: array<connectorTypes> = [
   Processors(MONERIS),
   Processors(REDSYS),
   Processors(HIPAY),
+  Processors(ARCHIPEL),
 ]
 
 let connectorListForLive: array<connectorTypes> = [
@@ -596,6 +597,10 @@ let riskifyedInfo = {
     },
   ],
 }
+let archipelInfo = {
+  description: "Full-service processor offering secure payment solutions and innovative banking technologies for businesses of all sizes.",
+}
+
 
 let getConnectorNameString = (connector: processorTypes) =>
   switch connector {
@@ -674,6 +679,7 @@ let getConnectorNameString = (connector: processorTypes) =>
   | MONERIS => "moneris"
   | REDSYS => "redsys"
   | HIPAY => "hipay"
+  | ARCHIPEL => "archipel"
   }
 
 let getPayoutProcessorNameString = (payoutProcessor: payoutProcessorTypes) =>
@@ -817,6 +823,7 @@ let getConnectorNameTypeFromString = (connector, ~connectorType=ConnectorTypes.P
     | "moneris" => Processors(MONERIS)
     | "redsys" => Processors(REDSYS)
     | "hipay" => Processors(HIPAY)
+    | "archipel" => Processors(ARCHIPEL)
     | _ => UnknownConnector("Not known")
     }
   | PayoutProcessor =>
@@ -940,6 +947,7 @@ let getProcessorInfo = (connector: ConnectorTypes.processorTypes) => {
   | MONERIS => monerisInfo
   | REDSYS => redsysInfo
   | HIPAY => hipayInfo
+  | ARCHIPEL => archipelInfo
   }
 }
 
@@ -1422,7 +1430,7 @@ let getConnectorFields = connectorDetails => {
   open LogicUtils
   let connectorAccountDict =
     connectorDetails->getDictFromJsonObject->getDictfromDict("connector_auth")
-  let bodyType = connectorAccountDict->Dict.keysToArray->Array.get(0)->Option.getOr("")
+  let bodyType = connectorAccountDict->Dict.keysToArray->Array.get(0)->Option.getOr("NoKey")
   let connectorAccountFields = connectorAccountDict->getDictfromDict(bodyType)
   let connectorMetaDataFields = connectorDetails->getDictFromJsonObject->getDictfromDict("metadata")
   let isVerifyConnector = connectorDetails->getDictFromJsonObject->getBool("is_verifiable", false)
@@ -1776,6 +1784,7 @@ let getDisplayNameForProcessor = (connector: ConnectorTypes.processorTypes) =>
   | MONERIS => "Moneris"
   | REDSYS => "Redsys"
   | HIPAY => "HiPay"
+  | ARCHIPEL => "ArchiPEL"
   }
 
 let getDisplayNameForPayoutProcessor = (payoutProcessor: ConnectorTypes.payoutProcessorTypes) =>
