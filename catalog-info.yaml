@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hyperswitch-control-center
+  description: "Open sourced control center for managing Hyperswitch - an open sourced payment switch."
+  annotations:
+    github.com/project-slug: Flowbird-Up/hyperswitch-control-center
+  tags:
+    - gha
+spec:
+  type: service
+  lifecycle: production
+  owner: open-payment-reporting
